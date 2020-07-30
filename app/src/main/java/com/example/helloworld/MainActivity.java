@@ -15,10 +15,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-    public void onBtnClick(View view) {
-        EditText editTxtName = findViewById(R.id.editTxtName);
+    public void onRegisterBtnClick(View view) {
+        EditText editTxtFirstName = findViewById(R.id.editTxtFirstName);
+        EditText editTxtLastName = findViewById(R.id.editTxtLastName);
+        EditText editTxtEmail = findViewById(R.id.editTxtEmail);
 
-        TextView txtHello = findViewById(R.id.txtMessage);
-        txtHello.setText(String.format("Hello %s", editTxtName.getText().toString()));
+        TextView txtFirstName = findViewById(R.id.txtFirstName);
+        TextView txtLastName = findViewById(R.id.txtLastName);
+        TextView txtEmail = findViewById(R.id.txtEmail);
+
+        txtFirstName.setText(String.format("First Name: %s", editTxtFirstName.getText().toString()));
+        txtLastName.setText(String.format("Last Name: %s", editTxtLastName.getText().toString()));
+        txtEmail.setText(String.format("Email: %s", editTxtEmail.getText().toString()));
     }
 }
