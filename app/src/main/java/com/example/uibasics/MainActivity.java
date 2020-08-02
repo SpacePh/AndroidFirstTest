@@ -1,61 +1,96 @@
 package com.example.uibasics;
 
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
+import android.os.SystemClock;
+//import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.ProgressBar;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity {
 
-    private TextView txtHello;
-    private EditText edtTxtName;
+    private CheckBox checkBoxHarry, checkBoxMatrix, checkBoxJoker;
+    private RadioGroup rgMaritalStatus;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button btnHello = findViewById(R.id.btnHello);
-        // First method
-//        btnHello.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                System.out.println("Hello");
-//            }
-//        });
-        // Second method
-        btnHello.setOnClickListener(this);
-        btnHello.setOnLongClickListener(new View.OnLongClickListener() {
+        checkBoxHarry = findViewById(R.id.checkboxHarry);
+        checkBoxMatrix = findViewById(R.id.checkboxMatrix);
+        checkBoxJoker = findViewById(R.id.checkboxJoker);
+
+        rgMaritalStatus = findViewById(R.id.rgMaritalStatus);
+
+        progressBar = findViewById(R.id.progressBar);
+
+        Thread thread = new Thread(new Runnable() {
             @Override
-            public boolean onLongClick(View view) {
-                Toast.makeText(MainActivity.this, "Long Press", Toast.LENGTH_LONG).show();
-                return true;
+            public void run() {
+                for (int i = 0; i < 10; i++) {
+                    progressBar.incrementProgressBy(10);
+                    SystemClock.sleep(500);
+                }
             }
         });
+        thread.start();
 
-        edtTxtName = findViewById(R.id.edtTxtName);
-        edtTxtName.setOnClickListener(this);
-        txtHello = findViewById(R.id.txtHello);
-    }
-
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.btnHello:
-//                System.out.println("Hello");
-//                Toast.makeText(this, "Hello Button Clicked", Toast.LENGTH_SHORT).show();
-                txtHello.setText("Hello " + edtTxtName.getText().toString());
+        int checkedButton = rgMaritalStatus.getCheckedRadioButtonId();
+        switch (checkedButton) {
+            case R.id.rbMarried:
+                Toast.makeText(MainActivity.this, "Married", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.edtTxtName:
-                Toast.makeText(this, "Attempting to type something", Toast.LENGTH_SHORT).show();
+            case R.id.rbSingle:
+                Toast.makeText(MainActivity.this, "Single", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.rbInRel:
+                Toast.makeText(MainActivity.this, "In a Relationship", Toast.LENGTH_SHORT).show();
                 break;
             default:
                 break;
         }
+
+        rgMaritalStatus.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                switch (i) {
+                    case R.id.rbMarried:
+                        Toast.makeText(MainActivity.this, "Married", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.rbSingle:
+                        Toast.makeText(MainActivity.this, "Single", Toast.LENGTH_SHORT).show();
+//                        progressBar.setVisibility(View.VISIBLE);
+                        break;
+                    case R.id.rbInRel:
+                        Toast.makeText(MainActivity.this, "In a Relationship", Toast.LENGTH_SHORT).show();
+//                        progressBar.setVisibility(View.GONE);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+
+        if (checkBoxHarry.isChecked())
+            Toast.makeText(MainActivity.this, "You have watched Harry Potter, Yay", Toast.LENGTH_SHORT).show();
+        else
+            Toast.makeText(MainActivity.this, "You NEED to watch Harry Potter", Toast.LENGTH_SHORT).show();
+
+
+        checkBoxHarry.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b)
+                    Toast.makeText(MainActivity.this, "You have watched Harry Potter, Yay", Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(MainActivity.this, "You NEED to watch Harry Potter", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
