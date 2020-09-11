@@ -13,16 +13,16 @@ public class Utils {
     private static List<Book> currentlyReadingBooks;
     private static List<Book> favoriteBooks;
 
-    private Utils(){
-        if(allBooks == null) {
+    private Utils() {
+        if (allBooks == null) {
             allBooks = new ArrayList<>();
             initData();
         }
 
-        if(alreadyReadBooks == null) alreadyReadBooks = new ArrayList<>();
-        if(wantToReadBooks == null) wantToReadBooks = new ArrayList<>();
-        if(currentlyReadingBooks == null) currentlyReadingBooks = new ArrayList<>();
-        if(favoriteBooks == null) favoriteBooks = new ArrayList<>();
+        if (alreadyReadBooks == null) alreadyReadBooks = new ArrayList<>();
+        if (wantToReadBooks == null) wantToReadBooks = new ArrayList<>();
+        if (currentlyReadingBooks == null) currentlyReadingBooks = new ArrayList<>();
+        if (favoriteBooks == null) favoriteBooks = new ArrayList<>();
     }
 
     private void initData() {
@@ -33,7 +33,7 @@ public class Utils {
     }
 
     public static Utils getInstance() {
-        if(instance == null) instance = new Utils();
+        if (instance == null) instance = new Utils();
         return instance;
     }
 
@@ -58,10 +58,26 @@ public class Utils {
     }
 
     public Book getBookById(int id) {
-        for ( Book b : allBooks) {
+        for (Book b : allBooks) {
             if (b.getId() == id)
                 return b;
         }
         return null;
+    }
+
+    public boolean addToAlreadyRead(Book book) {
+        return alreadyReadBooks.add(book);
+    }
+
+    public boolean addToWantToRead(Book book) {
+        return wantToReadBooks.add(book);
+    }
+
+    public boolean addToCurrentlyReading(Book book) {
+        return currentlyReadingBooks.add(book);
+    }
+
+    public boolean addToFavorite(Book book) {
+        return favoriteBooks.add(book);
     }
 }
