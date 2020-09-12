@@ -22,12 +22,6 @@ public class Utils {
 
     private SharedPreferences sharedPreferences;
 
-    private static List<Book> allBooks;
-    private static List<Book> alreadyReadBooks;
-    private static List<Book> wantToReadBooks;
-    private static List<Book> currentlyReadingBooks;
-    private static List<Book> favoriteBooks;
-
     private Utils(Context context) {
         sharedPreferences = context.getSharedPreferences("alternate_db", Context.MODE_PRIVATE);
         if (getAllBooks() == null) initData();
@@ -47,7 +41,7 @@ public class Utils {
             editor.putString(CURRENTLY_READING_BOOKS, gson.toJson(new ArrayList<Book>()));
             editor.commit();
         }
-        if (favoriteBooks == null) {
+        if (getFavoriteBooks() == null) {
             editor.putString(FAVORITE_BOOKS, gson.toJson(new ArrayList<Book>()));
             editor.commit();
         }
@@ -140,18 +134,36 @@ public class Utils {
     }
 
     public boolean removeFromAlreadyRead(Book book) {
-        return alreadyReadBooks.remove(book);
+        return removeFromList(getAlreadyReadBooks(), book, ALREADY_READ_BOOKS);
     }
 
     public boolean removeFromWantToRead(Book book) {
-        return wantToReadBooks.remove(book);
+        return removeFromList(getWantToReadBooks(), book, WANT_TO_READ_BOOKS);
     }
 
     public boolean removeFromCurrentlyReading(Book book) {
-        return currentlyReadingBooks.remove(book);
+        return removeFromList(getCurrentlyReadingBooks(), book, CURRENTLY_READING_BOOKS);
     }
 
     public boolean removeFromFavorites(Book book) {
-        return favoriteBooks.remove(book);
+        return removeFromList(getFavoriteBooks(), book, FAVORITE_BOOKS);
+    }
+
+    private boolean removeFromList(List<Book> books, Book book, String key){
+        if(books != null){
+            for(Book b : books) {
+                if(b.getId() == book.getId()){
+                    if(books.remove(b)){
+                        Gson gson = new Gson();
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.remove(key);
+                        editor.putString(key, gson.toJson(books));
+                        editor.commit();
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 }
